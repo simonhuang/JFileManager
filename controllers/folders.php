@@ -26,17 +26,40 @@ class CrudItemsControllerFolders extends JControllerForm
 
 		$category_id = $model->getCategoryID($data['item_id']);
 
+        //create and edit file folder
+		if ($data['id']){
+			//update folder
+
+			if ($model->isDuplicate($data['folder_name'], $data['id'])){
+				JError::raiseNotice( 100, 'Folder name already exists.' );
+
+		        $url = JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$data['id']);
+				$app->redirect($url);
+	        	JFactory::getApplication()->close();
+
+			} else {
+				if (!file_exists('components/com_cruditems/assets/files/'.$data['folder_name'])) {
+				    mkdir('components/com_cruditems/assets/files/'.$data['folder_name'], 0777, true);
+				}
+			}
+
+		} else {
+			
+			//new folder
+	        if (file_exists('components/com_cruditems/assets/files/'.$data['folder_name'])) {
+	        	JError::raiseNotice( 100, 'Folder name already exists.' );
+
+		        $url = JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$data['id']);
+				$app->redirect($url);
+	        	JFactory::getApplication()->close();
+			} else {
+			    mkdir('components/com_cruditems/assets/files/'.$data['folder_name'], 0777, true);
+			}
+
+		}
+
         $upditem = $model->updFolder($data);
 
-        //create file folder
-        if (file_exists('components/com_cruditems/assets/files/'.$data['name'])) {
-        	JError::raiseNotice( 100, 'Folder name already exists.' );
-		} else {
-		    mkdir('components/com_cruditems/assets/files/'.$data['name'], 0777, true);
-		}
-		
-        $see = JPATH_COMPONENT;
-        $see2 = JRoute::_('index.php?option=com_cruditems&view=items');
         if ($upditem) {
         	JError::raiseNotice( 100, 'Folder successfuly saved!');
         } else {

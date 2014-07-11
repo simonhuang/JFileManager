@@ -65,7 +65,17 @@ class CrudItemsModelFolders extends JModelItem
 	}
 
 
+	public function isDuplicate ($folder_name, $curr_id){
+		$db = JFactory::getDBO();
 
+		$sql = "SELECT id 
+				FROM #__crudfolders
+				WHERE name = \"$folder_name\" AND id <> $curr_id";
+		$db->setQuery($sql);
+		
+		$category_id = $db->loadObjectList();
+		return (bool)sizeof($category_id);
+	}
 	
 	public function getCategoryId($item_id)
 	{

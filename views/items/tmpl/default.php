@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 </section>
 <?php
 	$items = $this->items;
-	foreach ($items as $index => $item) :
+	foreach ($items as $index => $item):
 	?>
 		<article class="row">
 			<div class="col-xs-2">
