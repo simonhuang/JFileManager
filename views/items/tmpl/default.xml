@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Crud Items Items">
+		<message>Lists all CRUD in a given category.</message>
+	</layout>
+	<fields
+		name="request"
+		addfieldpath="/administrator/components/com_oxfordworklog/models/fields"
+	>
+		<fieldset name="request">
+			<field
+				name="id"
+				type="cruditems"
+				label="COM_CRUDITEMS_CRUDITEMS_FIELD_GREETING_LABEL"
+				description="COM_CRUDITEMS_CRUDITEMS_FIELD_GREETING_DESC"
+			/>
+		</fieldset>
+	</fields>
+</metadata>
+
