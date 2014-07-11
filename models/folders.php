@@ -33,15 +33,38 @@ class CrudItemsModelFolders extends JModelItem
 		return $folders;
 	}
 
-	public function deleteFolder($id)
+	public function getFolder()
 	{
 		$db = JFactory::getDBO();
 
-		$sql = "DELETE FROM #__cruditems
-				WHERE id=$id";
+		$id = JRequest::getInt('id', 0) ;
+
+		$sql = "SELECT id, item_id, name
+				FROM #__crudfolders
+				WHERE id = $id";
+
 		$db->setQuery($sql);
+
+		$folder = $db->loadObject();
+
+		return $folder;
+	}
+
+	public function deleteFolder()
+	{
+		$db = JFactory::getDBO();
+
+		$id = JRequest::getInt('id', 0) ;
+
+		$sql = "DELETE FROM #__crudfolders
+				WHERE id=$id";
+
+		$db->setQuery($sql);
+
 		$db->query();
 	}
+
+
 
 	
 	public function getCategoryId($item_id)
@@ -54,7 +77,7 @@ class CrudItemsModelFolders extends JModelItem
 		$db->setQuery($sql);
 		
 		$category_id = $db->loadResult();
-		return $category_id; 
+		return $category_id;
 		
 	}
 	public function updFolder($data)

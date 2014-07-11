@@ -28,6 +28,15 @@ class CrudItemsControllerFolders extends JControllerForm
 
         $upditem = $model->updFolder($data);
 
+        //create file folder
+        if (file_exists('components/com_cruditems/assets/files/'.$data['name'])) {
+        	JError::raiseNotice( 100, 'Folder name already exists.' );
+		} else {
+		    mkdir('components/com_cruditems/assets/files/'.$data['name'], 0777, true);
+		}
+		
+        $see = JPATH_COMPONENT;
+        $see2 = JRoute::_('index.php?option=com_cruditems&view=items');
         if ($upditem) {
         	JError::raiseNotice( 100, 'Folder successfuly saved!');
         } else {
@@ -42,13 +51,15 @@ class CrudItemsControllerFolders extends JControllerForm
 	{
 		$id = JRequest::getInt('id', 0);
 
-		$model	= $this->getModel('items');
-		$model->deleteItem($id);
+		$model	= $this->getModel('folders');
+		$model->deleteFolder();
 
-		JError::raiseNotice( 100, 'Item successfuly deleted.' );
+		JError::raiseNotice( 100, 'Folder successfuly deleted.' );
+
+		$items_model	= $this->getModel('items');
 
 		$category_id = JRequest::getInt('category_id', 0);
-		$category_name = $model->getName();
+		$category_name = $items_model->getName();
 
 		$app	= JFactory::getApplication();
 		$url = JRoute::_('index.php?option=com_cruditems&view=items&category_id='.$category_id.'&category_name='.$category_name);

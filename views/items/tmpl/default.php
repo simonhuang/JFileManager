@@ -28,7 +28,13 @@ defined('_JEXEC') or die('Restricted access');
 				<?php
 					foreach($item->folders as $i => $folder):
 					?>
-						<p>Folder: <?php echo $folder->name; ?></p>	
+						<p>
+							Folder: <?php echo $folder->name; ?>
+							<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$folder->id);?>">Edit Folder</a>
+							<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&task=folders.delete
+								&id='.$folder->id.'
+								&category_id='.$this->category_id);?>">Delete Folder</a>
+						</p>	
 					<?php
 					endforeach;
 				?>

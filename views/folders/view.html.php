@@ -42,9 +42,9 @@ class CrudItemsViewFolders extends JView
 	 		if ($this->id){
 				$this->header = "Edit Folder";
 
-				$item = $this->get('Folder');
-	 			$this->name= $item->name;
- 				$this->item_id= $item->item_id;
+				$folder = $this->get('Folder');
+	 			$this->name= $folder->name;
+ 				$this->item_id= $folder->item_id;
 
 	 		}
 
