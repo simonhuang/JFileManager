@@ -62,9 +62,13 @@ class CrudItemsViewItems extends JView
 
 
  		$folder_model = JModel::getInstance('folders', 'CrudItemsModel');
+ 		$file_model = JModel::getInstance('files', 'CrudItemsModel');
 
  		foreach ($this->items as $index => $item){
  			$item->folders = $folder_model->getFolders($item->id);
+ 			foreach ($item->folders as $folder){
+ 				$folder->files = $file_model->getFiles($folder->id);
+ 			}
  		}
 
 

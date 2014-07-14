@@ -41,20 +41,22 @@ class CrudItemsControllerFiles extends JControllerForm
 	}
 	public function delete()
 	{
-		$id = JRequest::getInt('id', 0);
-
-		$model	= $this->getModel('folders');
-		$model->deleteFolder();
-
-		JError::raiseNotice( 100, 'Folder successfuly deleted.' );
-
-		$items_model	= $this->getModel('items');
-
-		$category_id = JRequest::getInt('category_id', 0);
-		$category_name = $items_model->getName();
-
 		$app	= JFactory::getApplication();
-		$url = JRoute::_('index.php?option=com_cruditems&view=items&category_id='.$category_id.'&category_name='.$category_name);
+		$model	= $this->getModel('files');
+
+		$id = JRequest::getInt('id', 0);
+		$folder_id = JRequest::getInt('folder_id', 0);
+
+		$model	= $this->getModel('files');
+		$model->deleteFile();
+
+		$category_id = $model->getCategoryId($folder_id);
+		
+        $url = JRoute::_('index.php?option=com_cruditems&view=items&category_id='.$category_id);
 		$app->redirect($url);
+	}
+	public function downloadFile(){
+		$model	= $this->getModel('files');
+		$model->downloadFile();
 	}
 }

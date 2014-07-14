@@ -54,59 +54,97 @@ class CrudItemsModelFiles extends JModelItem
 
 		return $name;
 	}
+	private function getFileName($id){
+
+		$db = JFactory::getDBO();
+
+		$sql = "SELECT name FROM #__crudfiles
+				WHERE id=$id";
+
+		$db->setQuery($sql);
+
+		$name = $db->loadResult();
+
+		return $name;
+	}
 
 
 	//core functions
-	public function getFolders($item_id) 
+	public function getFiles($folder_id) 
 	{
 		$db = JFactory::getDBO();
 
 		$sql = "SELECT id, name
-				FROM #__crudfolders
-				WHERE item_id = $item_id";
+				FROM #__crudfiles
+				WHERE folder_id = $folder_id";
 
 		$db->setQuery($sql);
 
-		$folders = $db->loadObjectList();
+		$files = $db->loadObjectList();
 
-		return $folders;
+		return $files;
 	}
 
-	public function getFolder()
+	public function downloadFile()
 	{
 		$db = JFactory::getDBO();
 
-		$id = JRequest::getInt('id', 0) ;
+		$id = JRequest::getInt('id', 0);
 
-		$sql = "SELECT id, item_id, name
-				FROM #__crudfolders
+		$sql = "SELECT name, folder_id
+				FROM #__crudfiles
 				WHERE id = $id";
 
 		$db->setQuery($sql);
 
-		$folder = $db->loadObject();
+		$result = $db->loadObject();
 
-		return $folder;
+		$folder_name = $this->getFolderName($result->folder_id);
+
+		$file = $this->files_dir.$folder_name.'/'.$result->name;
+
+		if (file_exists($file)) {
+		    header('Content-Description: File Transfer');
+		    header('Content-Type: application/octet-stream');
+		    header('Content-Disposition: attachment; file_name='.basename($file));
+		    header('Content-Transfer-Encoding: binary');
+		    header('Expires: 0');
+		    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		    header('Pragma: public');
+		    header('Content-Length: ' . filesize($file));
+		    ob_clean();
+		    flush();
+		    readfile($file);
+		    exit;
+		}
 	}
 
-	public function deleteFolder()
+	public function deleteFile()
 	{
 		$db = JFactory::getDBO();
 
-		$id = JRequest::getInt('id', 0) ;
+		$id = JRequest::getInt('id', 0);
 
-		$folder_name = $this->getFolderName($id);
+		$sql = "SELECT name, folder_id
+				FROM #__crudfiles
+				WHERE id = $id";
 
-		$sql = "DELETE FROM #__crudfolders
+		$db->setQuery($sql);
+
+		$result = $db->loadObject();
+
+		$file_name = $result->name;
+		$folder_name = $this->getFolderName($result->folder_id);
+
+		unlink($this->files_dir.$folder_name.'/'.$file_name);
+
+
+		$sql = "DELETE FROM #__crudfiles
 				WHERE id=$id";
 
 		$db->setQuery($sql);
 
 		$db->query();
-
-
-		
-		$this->deleteDir($folder_name, true);
 	}
 
 	public function addFile($data, $file)
@@ -117,16 +155,16 @@ class CrudItemsModelFiles extends JModelItem
 		$folder_name = $this->getFolderName($folder_id);
 
 
-		$filename = JFile::makeSafe($file['name']['file']);
+		$file_name = JFile::makeSafe($file['name']['file']);
 
 		$src = $file['tmp_name']['file'];
-		$dest = $this->files_dir.$folder_name.'/'.$filename;
+		$dest = $this->files_dir.$folder_name.'/'.$file_name;
 
 		JFile::upload($src, $dest);
 
 		$sql = "INSERT INTO #__crudfiles
 				(folder_id, name)
-				VALUES ($folder_id, \"$filename\")";
+				VALUES ($folder_id, \"$file_name\")";
 		$db->setQuery($sql);
 
 		if (!$db->query()) {

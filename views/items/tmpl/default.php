@@ -28,33 +28,41 @@ defined('_JEXEC') or die('Restricted access');
 
 				<div class="panel-group" id="accordion<?php echo $index; ?>">
 
-				<?php
-					foreach($item->folders as $i => $folder):
-					?>
+				<?php foreach($item->folders as $i => $folder):  ?>
 
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion<?php echo $index; ?>" href="#collapse<?php echo $i;?>">
-							          	Folder: <?php echo $folder->name; ?>
-							        </a>
-								</h4>
-							</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion<?php echo $index; ?>" href="#collapse<?php echo $i;?>">
+						          	Folder: <?php echo $folder->name; ?>
+						        </a>
+							</h4>
+						</div>
 
-							<div id="collapse<?php echo $i;?>" class="panel-collapse collapse">
-								<div class="panel-body">
-									
-									<a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=files&layout=edit&folder_id='.$folder->id);?>">Add File</a>
-									<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$folder->id);?>">Edit Folder</a>
-									<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&task=folders.delete
-										&id='.$folder->id.'
-										&category_id='.$this->category_id);?>">Delete Folder</a>
-								</div>
+						<div id="collapse<?php echo $i;?>" class="panel-collapse collapse">
+							<div class="panel-body">
+								<?php foreach($folder->files as $file): ?>
+									<p>
+										<a class="btn btn-info" href="<?php echo JRoute::_('index.php?option=com_cruditems&task=files.downloadFile&id='.$file->id);?>">
+										<?php echo $file->name; ?>
+										</a>
+										<a class="btn btn-danger" href="<?php echo JRoute::_('index.php?option=com_cruditems&task=files.delete
+											&id='.$file->id.'
+											&folder_id='.$folder->id);?>">
+										Delete File
+										</a>
+									</p>
+
+								<?php endforeach; ?>
+								<a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=files&layout=edit&folder_id='.$folder->id);?>">Add File</a>
+								<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$folder->id);?>">Edit Folder</a>
+								<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&task=folders.delete
+									&id='.$folder->id.'
+									&category_id='.$this->category_id);?>">Delete Folder</a>
 							</div>
-						</div>	
-					<?php
-					endforeach;
-				?>
+						</div>
+					</div>	
+				<?php endforeach;?>
 
 				</div>
 
