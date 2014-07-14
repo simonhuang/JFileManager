@@ -24,7 +24,7 @@ class CrudItemsModelItems extends JModelItem
 
 		$category_id = JRequest::getInt('category_id', 0);
 
-		$sql = "SELECT id, title, content
+		$sql = "SELECT id, title, content, img
 				FROM #__cruditems
 				WHERE category_id = $category_id";
 
@@ -35,13 +35,13 @@ class CrudItemsModelItems extends JModelItem
 		return $items;
 	}
 
-	public function getItem() 
+	public function getItem()
 	{
 		$db = JFactory::getDBO();
 
 		$id = JRequest::getInt('id', 0);
 
-		$sql = "SELECT id, category_id, title, content
+		$sql = "SELECT id, category_id, title, content, img
 				FROM #__cruditems
 				WHERE id=$id";
 
@@ -80,8 +80,8 @@ class CrudItemsModelItems extends JModelItem
 	}
 
 	
-
-	public function updItem($data)
+	private $img_dir = 'components/com_cruditems/assets/img/';
+	public function updItem($data, $file)
 	{
 		$db = JFactory::getDBO();
 
@@ -91,21 +91,57 @@ class CrudItemsModelItems extends JModelItem
 		$title = $data['item_title'];
 		$content = $data['item_content'];
 
+		
+
+
 		if ($id) {
 			//update old entry
-			$sql = "UPDATE #__cruditems
+
+
+			if ($file['name']['item_img'] != ""){
+				$file_name = JFile::makeSafe($file['name']['item_img']);
+
+				$src = $file['tmp_name']['item_img'];
+				$dest = $this->img_dir.$file_name;
+
+				$thing = JFile::upload($src, $dest);
+
+				$sql = "UPDATE #__cruditems
+					SET title = \"$title\",
+					content = \"$content\",
+					img = \"$file_name\"
+					WHERE id = $id AND category_id = $category_id";
+			
+				$db->setQuery($sql);
+			} else {
+				$sql = "UPDATE #__cruditems
 					SET title = \"$title\",
 					content = \"$content\"
 					WHERE id = $id AND category_id = $category_id";
-
-			$db->setQuery($sql);
+			
+				$db->setQuery($sql);
+			}
 		} else {
 			//new entry
+			if ($file['name']['item_img'] != ""){
+				$file_name = JFile::makeSafe($file['name']['item_img']);
 
-			$sql = "INSERT INTO #__cruditems
-					(category_id, title, content)
-					VALUES ($category_id, \"$title\", \"$content\")";
-			$db->setQuery($sql);
+				$src = $file['tmp_name']['file'];
+				$dest = $this->img_dir.'/'.$file_name;
+
+				JFile::upload($src, $dest);
+
+
+				$sql = "INSERT INTO #__cruditems
+						(category_id, title, content, img)
+						VALUES ($category_id, \"$title\", \"$content\", \"$file_name\")";
+				$db->setQuery($sql);
+			} else {
+				$sql = "INSERT INTO #__cruditems
+						(category_id, title, content)
+						VALUES ($category_id, \"$title\", \"$content\")";
+				$db->setQuery($sql);
+			}
 		}
 
 		if (!$db->query()) {

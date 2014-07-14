@@ -12,9 +12,9 @@ JHtml::_('behavior.tooltip');
 <h2><?php echo $this->header ?></h2>
 <form autocomplete="on" class="form-horizontal" role="form" action="<?php echo JRoute::_('index.php'); ?>" method="post" id="file" name="file" enctype="multipart/form-data" data-parsley-validate data-parsley-focus="none">
     <div class="form-group">
-        <label for="file" class="col-md-2 control-label">Name *</label>
+        <label for="file" class="col-md-2 control-label">File *</label>
         <div class="col-md-10">
-            <input required type="file" value="<?php echo $this->name; ?>" class="form-control" name="jform[file]" id="file_name" placeholder="File Name" />
+            <input required type="file" class="form-control" name="jform[file]" id="file_name" placeholder="File Name" />
         </div>
     </div>
 

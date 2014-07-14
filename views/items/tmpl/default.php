@@ -18,6 +18,7 @@ defined('_JEXEC') or die('Restricted access');
 		<article class="row">
 			<div class="col-xs-2">
 				<?php echo $item->id;?>
+				<img src="components/com_cruditems/assets/img/<?php echo $item->img; ?>">
 			</div>
 			<div class="col-xs-6">
 				<?php echo $item->title;?>

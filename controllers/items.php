@@ -25,10 +25,11 @@ class CrudItemsControllerItems extends JControllerForm
 
 		// Get the data from the form POST
 		$data = JRequest::getVar('jform', array(), 'post', 'array');
+		$img = JRequest::getVar('jform', array(), 'files', 'array');
 
 		$category_id = $data['category_id'];
         // Now update the loaded data to the database via a function in the model
-        $upditem = $model->updItem($data);
+        $upditem = $model->updItem($data, $img);
 
     	// check if ok and display appropriate message.  This can also have a redirect if desired.
 

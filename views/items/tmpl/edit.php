@@ -10,7 +10,7 @@ JHtml::_('behavior.tooltip');
 
 
 <h2><?php echo $this->header ?></h2>
-<form autocomplete="on" class="form-horizontal" role="form" action="<?php echo JRoute::_('index.php'); ?>" method="post" id="item" name="item" data-parsley-validate data-parsley-focus="none">
+<form autocomplete="on" class="form-horizontal" role="form" action="<?php echo JRoute::_('index.php'); ?>" method="post" id="item" name="item" enctype="multipart/form-data" data-parsley-validate data-parsley-focus="none">
     <div class="form-group">
         <label for="item_title" class="col-md-2 control-label">Title *</label>
         <div class="col-md-10">
@@ -22,6 +22,13 @@ JHtml::_('behavior.tooltip');
         <label for="item_content" class="col-md-2 control-label">Content</label>
         <div class="col-md-10">
             <input value="<?php echo $this->content; ?>" class="form-control" name="jform[item_content]" id="item_content" placeholder="Item Content" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="item_img" class="col-md-2 control-label">Image</label>
+        <div class="col-md-10">
+            <input required type="file" class="form-control" name="jform[item_img]" id="item_img"/>
         </div>
     </div>
 

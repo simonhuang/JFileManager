@@ -160,7 +160,7 @@ class CrudItemsModelFiles extends JModelItem
 		$src = $file['tmp_name']['file'];
 		$dest = $this->files_dir.$folder_name.'/'.$file_name;
 
-		JFile::upload($src, $dest);
+		$thing = JFile::upload($src, $dest);
 
 		$sql = "INSERT INTO #__crudfiles
 				(folder_id, name)
