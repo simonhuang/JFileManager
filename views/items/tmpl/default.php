@@ -44,6 +44,7 @@ defined('_JEXEC') or die('Restricted access');
 							<div id="collapse<?php echo $i;?>" class="panel-collapse collapse">
 								<div class="panel-body">
 									
+									<a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=files&layout=edit&folder_id='.$folder->id);?>">Add File</a>
 									<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$folder->id);?>">Edit Folder</a>
 									<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&task=folders.delete
 										&id='.$folder->id.'

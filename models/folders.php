@@ -18,6 +18,50 @@ class CrudItemsModelFolders extends JModelItem
 	 * @return object The message to be displayed to the user
 	 */
 
+	private $files_dir = 'components/com_cruditems/assets/files/';
+
+	//helper functions
+	private function deleteDir($dir_path, $is_root) {
+		if ($is_root) $dir_path = $this->files_dir.$dir_path;
+
+	    if (! is_dir($dir_path)) {
+	        throw new InvalidArgumentException("$dir_path must be a directory");
+	    }
+	    $files = glob($dir_path . '*', GLOB_MARK);
+	    foreach ($files as $file) {
+	        if (is_dir($file)) {
+	            self::deleteDir($file, false);
+	        } else {
+	            unlink($file);
+	        }
+	    }
+	    rmdir($dir_path);
+	}
+	private function renameDir($dir_path, $new_dir_path) {
+	    rename ($this->files_dir.$dir_path, $this->files_dir.$new_dir_path);
+	}
+	private function createDir($dir_path) {
+	    mkdir($this->files_dir.$dir_path, 0777, true);
+	}
+
+
+
+	private function getFolderName($id){
+
+		$db = JFactory::getDBO();
+
+		$sql = "SELECT name FROM #__crudfolders
+				WHERE id=$id";
+
+		$db->setQuery($sql);
+
+		$name = $db->loadResult();
+
+		return $name;
+	}
+
+
+	//core functions
 	public function getFolders($item_id) 
 	{
 		$db = JFactory::getDBO();
@@ -56,12 +100,18 @@ class CrudItemsModelFolders extends JModelItem
 
 		$id = JRequest::getInt('id', 0) ;
 
+		$folder_name = $this->getFolderName($id);
+
 		$sql = "DELETE FROM #__crudfolders
 				WHERE id=$id";
 
 		$db->setQuery($sql);
 
 		$db->query();
+
+
+		
+		$this->deleteDir($folder_name, true);
 	}
 
 
@@ -99,8 +149,14 @@ class CrudItemsModelFolders extends JModelItem
 		$item_id = $data['item_id'];
 		$name = $data['folder_name'];
 
+
 		if ($id) {
 			//update old entry
+
+			$old_name = $this->getFolderName($id);
+
+			$this->renameDir($old_name, $name);
+
 			$sql = "UPDATE #__crudfolders
 					SET name = \"$name\"
 					WHERE id = $id AND item_id = $item_id";
@@ -108,7 +164,7 @@ class CrudItemsModelFolders extends JModelItem
 			$db->setQuery($sql);
 		} else {
 			//new entry
-
+			$this->createDir($name);
 			$sql = "INSERT INTO #__crudfolders
 					(item_id, name)
 					VALUES ($item_id, \"$name\")";
