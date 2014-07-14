@@ -14,7 +14,7 @@ class CrudItemsViewFolders extends JView
 	function display($tpl = null) 
 	{
 		$document = JFactory::getDocument();
-
+		$document->addScript(JURI::base() . 'components/com_cruditems/assets/js/jquery-1.11.1.min.js');
 		$document->addStyleSheet(JURI::base() . 'components/com_cruditems/assets/css/bootstrap.css');
         $document->addScript(JURI::base() . 'components/com_cruditems/assets/js/bootstrap.js');
 

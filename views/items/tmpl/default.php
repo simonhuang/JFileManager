@@ -10,6 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 	<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=items&layout=edit&category_id='.$this->category_id);?>">Add New Item</a>
 	<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=categories');?>">Back to Categories</a>
 </section>
+
 <?php
 	$items = $this->items;
 	foreach ($items as $index => $item):
@@ -25,19 +26,37 @@ defined('_JEXEC') or die('Restricted access');
 				<?php echo $item->content;?>
 				<br>
 
+				<div class="panel-group" id="accordion<?php echo $index; ?>">
+
 				<?php
 					foreach($item->folders as $i => $folder):
 					?>
-						<p>
-							Folder: <?php echo $folder->name; ?>
-							<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$folder->id);?>">Edit Folder</a>
-							<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&task=folders.delete
-								&id='.$folder->id.'
-								&category_id='.$this->category_id);?>">Delete Folder</a>
-						</p>	
+
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion<?php echo $index; ?>" href="#collapse<?php echo $i;?>">
+							          	Folder: <?php echo $folder->name; ?>
+							        </a>
+								</h4>
+							</div>
+
+							<div id="collapse<?php echo $i;?>" class="panel-collapse collapse">
+								<div class="panel-body">
+									
+									<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$folder->id);?>">Edit Folder</a>
+									<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&task=folders.delete
+										&id='.$folder->id.'
+										&category_id='.$this->category_id);?>">Delete Folder</a>
+								</div>
+							</div>
+						</div>	
 					<?php
 					endforeach;
 				?>
+
+				</div>
+
 			</div>
 			<div class="col-xs-4">
 				<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=items&layout=edit&id='.$item->id);?>">Edit</a>
