@@ -6,7 +6,6 @@
 
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
-  font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
@@ -176,14 +175,6 @@ textarea {
 optgroup {
   font-weight: bold;
 }
-table {
-  border-spacing: 0;
-  border-collapse: collapse;
-}
-td,
-th {
-  padding: 0;
-}
 @media print {
   * {
     color: #000 !important;
@@ -256,13 +247,13 @@ th {
     border: 1px solid #ddd !important;
   }
 }
-* {
+.bootstrap * {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
 }
-*:before,
-*:after {
+.bootstrap *:before,
+.bootstrap *:after {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;

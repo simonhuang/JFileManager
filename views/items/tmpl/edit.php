@@ -8,7 +8,7 @@ JHtml::_('behavior.tooltip');
 
 ?>
 
-
+<section class="bootstrap">
 <h2><?php echo $this->header ?></h2>
 <form autocomplete="on" class="form-horizontal" role="form" action="<?php echo JRoute::_('index.php'); ?>" method="post" id="item" name="item" enctype="multipart/form-data" data-parsley-validate data-parsley-focus="none">
     <div class="form-group">
@@ -28,7 +28,7 @@ JHtml::_('behavior.tooltip');
     <div class="form-group">
         <label for="item_img" class="col-md-2 control-label">Image</label>
         <div class="col-md-10">
-            <input required type="file" class="form-control" name="jform[item_img]" id="item_img"/>
+            <input type="file" class="form-control" name="jform[item_img]" id="item_img"/>
         </div>
     </div>
 
@@ -37,7 +37,7 @@ JHtml::_('behavior.tooltip');
     <input type="hidden" name="jform[id]" value="<?php echo $this->id; ?>" />
     <input type="hidden" name="jform[category_id]" value="<?php echo $this->category_id; ?>" />
 
-    <input type="hidden" name="option" value="com_cruditems" />
+    <input type="hidden" name="option" value="com_jfilemanager" />
     <input type="hidden" name="task" value="items.submit" />
 
     
@@ -52,3 +52,4 @@ JHtml::_('behavior.tooltip');
 
     <?php echo JHtml::_('form.token'); ?>
 </form>
+</section>

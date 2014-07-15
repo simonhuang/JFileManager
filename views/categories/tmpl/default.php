@@ -3,33 +3,41 @@
 defined('_JEXEC') or die('Restricted access');
 
 ?>
-<section class="container">
+<section class="bootstrap">
 <h2><?php echo $this->header ?></h2>
 
 <section class="main-actions">
-	<a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=categories&layout=edit');?>">Add New Category</a>
+	<a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&view=categories&layout=edit');?>">Add New Category</a>
 </section>
-<?php
-	$categories = $this->categories;
-	foreach ($categories as $index => $category) {
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Category ID</th>
+			<th>Category Name</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php 
+		$categories = $this->categories;
+		foreach ($categories as $index => $category): 
 		?>
-			<article class="row">
-				<div class="col-xs-2">
-					<?php echo $category->id;?>
-				</div>
-				<div class="col-xs-6">
-					<a class="btn btn-primary" 
-						href="<?php echo JRoute::_('index.php?option=com_cruditems&view=items&category_id='.$category->id);?>">
+
+			<tr>
+				<td><?php echo $category->id;?></td>
+				<td>
+					<a class="btn btn-info" 
+						href="<?php echo JRoute::_('index.php?option=com_jfilemanager&view=items&category_id='.$category->id);?>">
 						<?php echo $category->name;?>
 					</a>
-				</div>
-				<div class="col-xs-4">
-					<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&view=categories&layout=edit&id='.$category->id);?>">Edit</a>
-					<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_cruditems&task=categories.delete&id='.$category->id);?>">Delete</a>
-				</div>
-				
-			</article>
-		<?php
-	}
-?>
+				</td>
+				<td>
+					<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&view=categories&layout=edit&id='.$category->id);?>">Edit</a>
+					<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&task=categories.delete&id='.$category->id);?>">Delete</a>
+				</td>
+			</tr>
+		<?php endforeach; ?>
+	</tbody>
+</table>
 </section>

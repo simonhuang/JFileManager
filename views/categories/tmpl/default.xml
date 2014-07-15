@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="COM_CRUDITEMS_CRUDITEMS_VIEW_DEFAULT_TITLE">
-		<message>COM_CRUDITEMS_CRUDITEMS_VIEW_DEFAULT_DESC</message>
+	<layout title="Category">
+		<message>Category</message>
 	</layout>
 	<fields
 		name="request"
@@ -10,9 +10,9 @@
 		<fieldset name="request">
 			<field
 				name="id"
-				type="cruditems"
-				label="COM_CRUDITEMS_CRUDITEMS_FIELD_GREETING_LABEL"
-				description="COM_CRUDITEMS_CRUDITEMS_FIELD_GREETING_DESC"
+				type="jfilemanager"
+				label="Category"
+				description="Main Category Page"
 			/>
 		</fieldset>
 	</fields>

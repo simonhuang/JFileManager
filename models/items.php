@@ -7,9 +7,9 @@ jimport('joomla.application.component.modelitem');
 // Include dependancy of the dispatcher
 jimport('joomla.event.dispatcher');
 /**
- * CrudItems Model
+ * JFileManager Model
  */
-class CrudItemsModelItems extends JModelItem
+class JFileManagerModelItems extends JModelItem
 {
 
 
@@ -18,6 +18,8 @@ class CrudItemsModelItems extends JModelItem
 	 * @return object The message to be displayed to the user
 	 */
 
+	private $img_dir = 'components/com_jfilemanager/assets/img/';
+
 	public function getItems() 
 	{
 		$db = JFactory::getDBO();
@@ -25,7 +27,7 @@ class CrudItemsModelItems extends JModelItem
 		$category_id = JRequest::getInt('category_id', 0);
 
 		$sql = "SELECT id, title, content, img
-				FROM #__cruditems
+				FROM #__jfmitems
 				WHERE category_id = $category_id";
 
 		$db->setQuery($sql);
@@ -42,7 +44,7 @@ class CrudItemsModelItems extends JModelItem
 		$id = JRequest::getInt('id', 0);
 
 		$sql = "SELECT id, category_id, title, content, img
-				FROM #__cruditems
+				FROM #__jfmitems
 				WHERE id=$id";
 
 		$db->setQuery($sql);
@@ -59,7 +61,7 @@ class CrudItemsModelItems extends JModelItem
 		$id = JRequest::getInt('category_id', 0);
 
 		$sql = "SELECT name
-				FROM #__crudcategories
+				FROM #__jfmcategories
 				WHERE id=$id";
 
 		$db->setQuery($sql);
@@ -73,14 +75,23 @@ class CrudItemsModelItems extends JModelItem
 	{
 		$db = JFactory::getDBO();
 
-		$sql = "DELETE FROM #__cruditems
+		$sql = "SELECT img 
+				FROM #__jfmitems
+				WHERE id = $id";
+
+		$db->setQuery($sql);
+		$old_img = $db->loadResult();
+
+		unlink($this->img_dir.$old_img);
+
+		$sql = "DELETE FROM #__jfmitems
 				WHERE id=$id";
 		$db->setQuery($sql);
 		$db->query();
 	}
 
 	
-	private $img_dir = 'components/com_cruditems/assets/img/';
+	
 	public function updItem($data, $file)
 	{
 		$db = JFactory::getDBO();
@@ -106,7 +117,16 @@ class CrudItemsModelItems extends JModelItem
 
 				$thing = JFile::upload($src, $dest);
 
-				$sql = "UPDATE #__cruditems
+				$sql = "SELECT img 
+						FROM #__jfmitems
+						WHERE id = $id";
+
+				$db->setQuery($sql);
+				$old_img = $db->loadResult();
+
+				unlink($this->img_dir.$old_img);
+
+				$sql = "UPDATE #__jfmitems
 					SET title = \"$title\",
 					content = \"$content\",
 					img = \"$file_name\"
@@ -114,7 +134,7 @@ class CrudItemsModelItems extends JModelItem
 			
 				$db->setQuery($sql);
 			} else {
-				$sql = "UPDATE #__cruditems
+				$sql = "UPDATE #__jfmitems
 					SET title = \"$title\",
 					content = \"$content\"
 					WHERE id = $id AND category_id = $category_id";
@@ -126,18 +146,18 @@ class CrudItemsModelItems extends JModelItem
 			if ($file['name']['item_img'] != ""){
 				$file_name = JFile::makeSafe($file['name']['item_img']);
 
-				$src = $file['tmp_name']['file'];
+				$src = $file['tmp_name']['item_img'];
 				$dest = $this->img_dir.'/'.$file_name;
 
 				JFile::upload($src, $dest);
 
 
-				$sql = "INSERT INTO #__cruditems
+				$sql = "INSERT INTO #__jfmitems
 						(category_id, title, content, img)
 						VALUES ($category_id, \"$title\", \"$content\", \"$file_name\")";
 				$db->setQuery($sql);
 			} else {
-				$sql = "INSERT INTO #__cruditems
+				$sql = "INSERT INTO #__jfmitems
 						(category_id, title, content)
 						VALUES ($category_id, \"$title\", \"$content\")";
 				$db->setQuery($sql);

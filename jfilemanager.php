@@ -5,8 +5,8 @@ defined('_JEXEC') or die('Restricted access');
 // import joomla controller library
 jimport('joomla.application.component.controller');
  
-// Get an instance of the controller prefixed by CrudItems
-$controller = JController::getInstance('CrudItems');
+// Get an instance of the controller prefixed by JFileManager
+$controller = JController::getInstance('JFileManager');
  
 // Perform the Request task
 $controller->execute(JRequest::getCmd('task'));

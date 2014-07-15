@@ -7,9 +7,9 @@ jimport('joomla.application.component.modelitem');
 // Include dependancy of the dispatcher
 jimport('joomla.event.dispatcher');
 /**
- * CrudItems Model
+ * JFileManager Model
  */
-class CrudItemsModelFolders extends JModelItem
+class JFileManagerModelFolders extends JModelItem
 {
 
 
@@ -18,7 +18,7 @@ class CrudItemsModelFolders extends JModelItem
 	 * @return object The message to be displayed to the user
 	 */
 
-	private $files_dir = 'components/com_cruditems/assets/files/';
+	private $files_dir = 'components/com_jfilemanager/assets/files/';
 
 	//helper functions
 	private function deleteDir($dir_path, $is_root) {
@@ -50,7 +50,7 @@ class CrudItemsModelFolders extends JModelItem
 
 		$db = JFactory::getDBO();
 
-		$sql = "SELECT name FROM #__crudfolders
+		$sql = "SELECT name FROM #__jfmfolders
 				WHERE id=$id";
 
 		$db->setQuery($sql);
@@ -67,7 +67,7 @@ class CrudItemsModelFolders extends JModelItem
 		$db = JFactory::getDBO();
 
 		$sql = "SELECT id, name
-				FROM #__crudfolders
+				FROM #__jfmfolders
 				WHERE item_id = $item_id";
 
 		$db->setQuery($sql);
@@ -84,7 +84,7 @@ class CrudItemsModelFolders extends JModelItem
 		$id = JRequest::getInt('id', 0) ;
 
 		$sql = "SELECT id, item_id, name
-				FROM #__crudfolders
+				FROM #__jfmfolders
 				WHERE id = $id";
 
 		$db->setQuery($sql);
@@ -100,9 +100,7 @@ class CrudItemsModelFolders extends JModelItem
 
 		$id = JRequest::getInt('id', 0) ;
 
-		$folder_name = $this->getFolderName($id);
-
-		$sql = "DELETE FROM #__crudfolders
+		$sql = "DELETE FROM #__jfmfolders
 				WHERE id=$id";
 
 		$db->setQuery($sql);
@@ -110,6 +108,7 @@ class CrudItemsModelFolders extends JModelItem
 		$db->query();
 
 
+		$folder_name = $this->getFolderName($id);
 		
 		$this->deleteDir($folder_name, true);
 	}
@@ -119,7 +118,7 @@ class CrudItemsModelFolders extends JModelItem
 		$db = JFactory::getDBO();
 
 		$sql = "SELECT id 
-				FROM #__crudfolders
+				FROM #__jfmfolders
 				WHERE name = \"$folder_name\" AND id <> $curr_id";
 		$db->setQuery($sql);
 		
@@ -132,7 +131,7 @@ class CrudItemsModelFolders extends JModelItem
 		$db = JFactory::getDBO();
 
 		$sql = "SELECT category_id 
-				FROM #__cruditems
+				FROM #__jfmitems
 				WHERE id = $item_id";
 		$db->setQuery($sql);
 		
@@ -157,7 +156,7 @@ class CrudItemsModelFolders extends JModelItem
 
 			$this->renameDir($old_name, $name);
 
-			$sql = "UPDATE #__crudfolders
+			$sql = "UPDATE #__jfmfolders
 					SET name = \"$name\"
 					WHERE id = $id AND item_id = $item_id";
 
@@ -165,7 +164,7 @@ class CrudItemsModelFolders extends JModelItem
 		} else {
 			//new entry
 			$this->createDir($name);
-			$sql = "INSERT INTO #__crudfolders
+			$sql = "INSERT INTO #__jfmfolders
 					(item_id, name)
 					VALUES ($item_id, \"$name\")";
 			$db->setQuery($sql);

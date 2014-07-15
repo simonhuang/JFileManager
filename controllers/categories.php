@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
 // Include dependancy of the main controllerform class
 jimport('joomla.application.component.controllerform');
 
-class CrudItemsControllerCategories extends JControllerForm
+class JFileManagerControllerCategories extends JControllerForm
 {
 
 	public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true))
@@ -16,42 +16,45 @@ class CrudItemsControllerCategories extends JControllerForm
 
 	public function submit()
 	{
-		// Check for request forgeries.
+		// check for request forgeries
 		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		// Initialise variables.
+		// initialise variables
 		$app	= JFactory::getApplication();
 		$model	= $this->getModel('categories');
 
-		// Get the data from the form POST
+		// get the data from the form POST
 		$data = JRequest::getVar('jform', array(), 'post', 'array');
 
-        // Now update the loaded data to the database via a function in the model
+        // load data to the database via a function in the model
         $upditem	= $model->updCategory($data);
 
-    	// check if ok and display appropriate message.  This can also have a redirect if desired.
-
+    	// check if ok and display appropriate message and redirect
         if ($upditem) {
         	JError::raiseNotice( 100, 'Category successfuly saved!' );
         } else {
             JError::raiseNotice( 100, 'An error has occured. <br> Category not saved' );
         }   
-        $url = JRoute::_('index.php?option=com_cruditems&view=categories');
+        $url = JRoute::_('index.php?option=com_jfilemanager&view=categories');
 		$app->redirect($url);
 
 		return true;
 	}
 	public function delete()
 	{
+		// grab get variables
 		$id = JRequest::getInt('id', 0);
 
+		// get model and delete category by id via function in the model
 		$model	= $this->getModel('categories');
 		$model->deleteCategory($id);
 
+		// enqueue notice
 		JError::raiseNotice( 100, 'Category successfuly deleted.' );
 
+		// redirect to default categories view
 		$app	= JFactory::getApplication();
-		$url = JRoute::_('index.php?option=com_cruditems&view=categories');
+		$url = JRoute::_('index.php?option=com_jfilemanager&view=categories');
 		$app->redirect($url);
 	}
 }

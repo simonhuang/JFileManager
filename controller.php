@@ -8,6 +8,6 @@ jimport('joomla.application.component.controller');
 /**
  * Hello World Component Controller
  */
-class CrudItemsController extends JController
+class JFileManagerController extends JController
 {
 }

@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
 // Include dependancy of the main controllerform class
 jimport('joomla.application.component.controllerform');
 
-class CrudItemsControllerFolders extends JControllerForm
+class JFileManagerControllerFolders extends JControllerForm
 {
 
 	public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true))
@@ -17,23 +17,27 @@ class CrudItemsControllerFolders extends JControllerForm
 	
 	public function submit()
 	{
-		// Check for request forgeries.
+		// check for request forgeries
 		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
+		// initilize key variables
 		$app	= JFactory::getApplication();
 		$model	= $this->getModel('folders');
 
+		// get posted data
 		$data = JRequest::getVar('jform', array(), 'post', 'array');
 
-		$category_id = $model->getCategoryID($data['item_id']);
 
+		// check for folder create name conflicts with existing folders
 		if ($data['id']){
 			//update folder
 
 			if ($model->isDuplicate($data['folder_name'], $data['id'])){
+
+				// if folder already exists, avoid overwriting original folder
 				JError::raiseNotice( 100, 'Folder name already exists.' );
 
-		        $url = JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$data['id']);
+		        $url = JRoute::_('index.php?option=com_jfilemanager&view=folders&layout=edit&id='.$data['id']);
 				$app->redirect($url);
 	        	JFactory::getApplication()->close();
 
@@ -41,36 +45,49 @@ class CrudItemsControllerFolders extends JControllerForm
 
 		} else {
 			
-			//new folder
-	        if (file_exists('components/com_cruditems/assets/files/'.$data['folder_name'])) {
+			// new folder
+	        if (file_exists('components/com_jfilemanager/assets/files/'.$data['folder_name'])) {
+
+	        	// if folder already exists, avoid overwriting original folder
 	        	JError::raiseNotice( 100, 'Folder name already exists.' );
 
-		        $url = JRoute::_('index.php?option=com_cruditems&view=folders&layout=edit&id='.$data['id']);
+		        $url = JRoute::_('index.php?option=com_jfilemanager&view=folders&layout=edit&id='.$data['id']);
 				$app->redirect($url);
 	        	JFactory::getApplication()->close();
 			}
 		}
 
+		// update or create folder via function in the model
         $upditem = $model->updFolder($data);
 
+        // set appropriate message
         if ($upditem) {
         	JError::raiseNotice( 100, 'Folder successfuly saved!');
         } else {
             JError::raiseNotice( 100, 'An error has occured. <br> Folder not saved.');
         }   
-        $url = JRoute::_('index.php?option=com_cruditems&view=items&category_id='.$category_id);
+
+        // get category id via model function for redirect
+		$category_id = $model->getCategoryID($data['item_id']);
+        $url = JRoute::_('index.php?option=com_jfilemanager&view=items&category_id='.$category_id);
 		$app->redirect($url);
 
 		return true;
 	}
 	public function delete()
 	{
+		// initilize key variables
 		$id = JRequest::getInt('id', 0);
-
 		$model	= $this->getModel('folders');
+
+		// delete folder via function in the model
 		$model->deleteFolder();
 
+		// set message
 		JError::raiseNotice( 100, 'Folder successfuly deleted.' );
+
+
+		// get items model in order to get the category id for redirect
 
 		$items_model	= $this->getModel('items');
 
@@ -78,7 +95,7 @@ class CrudItemsControllerFolders extends JControllerForm
 		$category_name = $items_model->getName();
 
 		$app	= JFactory::getApplication();
-		$url = JRoute::_('index.php?option=com_cruditems&view=items&category_id='.$category_id.'&category_name='.$category_name);
+		$url = JRoute::_('index.php?option=com_jfilemanager&view=items&category_id='.$category_id.'&category_name='.$category_name);
 		$app->redirect($url);
 	}
 }

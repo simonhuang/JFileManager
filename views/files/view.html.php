@@ -6,17 +6,18 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
  
 /**
- * HTML View class for the CrudItems Component
+ * HTML View class for the JFileManager Component
  */
-class CrudItemsViewFiles extends JView
+class JFileManagerViewFiles extends JView
 {
 	// Overwriting JView display method
 	function display($tpl = null) 
 	{
 		$document = JFactory::getDocument();
-		$document->addScript(JURI::base() . 'components/com_cruditems/assets/js/jquery-1.11.1.min.js');
-		$document->addStyleSheet(JURI::base() . 'components/com_cruditems/assets/css/bootstrap.css');
-        $document->addScript(JURI::base() . 'components/com_cruditems/assets/js/bootstrap.js');
+		$document->addScript(JURI::base() . 'components/com_jfilemanager/assets/js/jquery-1.11.1.min.js');
+		$document->addStyleSheet(JURI::base() . 'components/com_jfilemanager/assets/css/bootstrap.css');
+        $document->addScript(JURI::base() . 'components/com_jfilemanager/assets/js/bootstrap.js');
+        $document->addStyleSheet(JURI::base() . 'components/com_jfilemanager/assets/css/styles.css');
 
 
 		$user = JFactory::getUser();

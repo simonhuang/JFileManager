@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
 // Include dependancy of the main controllerform class
 jimport('joomla.application.component.controllerform');
 
-class CrudItemsControllerItems extends JControllerForm
+class JFileManagerControllerItems extends JControllerForm
 {
 
 	public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true))
@@ -38,25 +38,33 @@ class CrudItemsControllerItems extends JControllerForm
         } else {
             JError::raiseNotice( 100, 'An error has occured. <br> Category not saved' );
         }   
-        $url = JRoute::_('index.php?option=com_cruditems&view=items&category_id='.$category_id);
+
+        // redirect
+        $url = JRoute::_('index.php?option=com_jfilemanager&view=items&category_id='.$category_id);
 		$app->redirect($url);
 
 		return true;
 	}
 	public function delete()
 	{
+		// initialize key variables
 		$id = JRequest::getInt('id', 0);
-
 		$model	= $this->getModel('items');
+
+		// delete item via function in the model
 		$model->deleteItem($id);
 
+
+		// set message
 		JError::raiseNotice( 100, 'Item successfuly deleted.' );
 
+
+		// get category id for direct
 		$category_id = JRequest::getInt('category_id', 0);
 		$category_name = $model->getName();
 
 		$app	= JFactory::getApplication();
-		$url = JRoute::_('index.php?option=com_cruditems&view=items&category_id='.$category_id.'&category_name='.$category_name);
+		$url = JRoute::_('index.php?option=com_jfilemanager&view=items&category_id='.$category_id.'&category_name='.$category_name);
 		$app->redirect($url);
 	}
 }

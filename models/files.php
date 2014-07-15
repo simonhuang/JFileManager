@@ -7,9 +7,9 @@ jimport('joomla.application.component.modelitem');
 // Include dependancy of the dispatcher
 jimport('joomla.event.dispatcher');
 /**
- * CrudItems Model
+ * JFileManager Model
  */
-class CrudItemsModelFiles extends JModelItem
+class JFileManagerModelFiles extends JModelItem
 {
 
 
@@ -17,7 +17,7 @@ class CrudItemsModelFiles extends JModelItem
 	 * Get the message
 	 * @return object The message to be displayed to the user
 	 */
-	private $files_dir = 'components/com_cruditems/assets/files/';
+	private $files_dir = 'components/com_jfilemanager/assets/files/';
 
 	//helper functions
 	public function getCategoryId($folder_id)
@@ -26,14 +26,14 @@ class CrudItemsModelFiles extends JModelItem
 
 
 		$sql = "SELECT item_id 
-				FROM #__crudfolders
+				FROM #__jfmfolders
 				WHERE id = $folder_id";
 		$db->setQuery($sql);
 
 		$item_id = $db->loadResult();
 
 		$sql = "SELECT category_id 
-				FROM #__cruditems
+				FROM #__jfmitems
 				WHERE id = $item_id";
 		$db->setQuery($sql);
 		
@@ -45,7 +45,7 @@ class CrudItemsModelFiles extends JModelItem
 
 		$db = JFactory::getDBO();
 
-		$sql = "SELECT name FROM #__crudfolders
+		$sql = "SELECT name FROM #__jfmfolders
 				WHERE id=$id";
 
 		$db->setQuery($sql);
@@ -58,7 +58,7 @@ class CrudItemsModelFiles extends JModelItem
 
 		$db = JFactory::getDBO();
 
-		$sql = "SELECT name FROM #__crudfiles
+		$sql = "SELECT name FROM #__jfmfiles
 				WHERE id=$id";
 
 		$db->setQuery($sql);
@@ -75,7 +75,7 @@ class CrudItemsModelFiles extends JModelItem
 		$db = JFactory::getDBO();
 
 		$sql = "SELECT id, name
-				FROM #__crudfiles
+				FROM #__jfmfiles
 				WHERE folder_id = $folder_id";
 
 		$db->setQuery($sql);
@@ -92,7 +92,7 @@ class CrudItemsModelFiles extends JModelItem
 		$id = JRequest::getInt('id', 0);
 
 		$sql = "SELECT name, folder_id
-				FROM #__crudfiles
+				FROM #__jfmfiles
 				WHERE id = $id";
 
 		$db->setQuery($sql);
@@ -102,6 +102,8 @@ class CrudItemsModelFiles extends JModelItem
 		$folder_name = $this->getFolderName($result->folder_id);
 
 		$file = $this->files_dir.$folder_name.'/'.$result->name;
+
+		$see = basename($file);
 
 		if (file_exists($file)) {
 		    header('Content-Description: File Transfer');
@@ -119,14 +121,12 @@ class CrudItemsModelFiles extends JModelItem
 		}
 	}
 
-	public function deleteFile()
+	public function deleteFile($id)
 	{
 		$db = JFactory::getDBO();
 
-		$id = JRequest::getInt('id', 0);
-
 		$sql = "SELECT name, folder_id
-				FROM #__crudfiles
+				FROM #__jfmfiles
 				WHERE id = $id";
 
 		$db->setQuery($sql);
@@ -139,7 +139,7 @@ class CrudItemsModelFiles extends JModelItem
 		unlink($this->files_dir.$folder_name.'/'.$file_name);
 
 
-		$sql = "DELETE FROM #__crudfiles
+		$sql = "DELETE FROM #__jfmfiles
 				WHERE id=$id";
 
 		$db->setQuery($sql);
@@ -162,7 +162,7 @@ class CrudItemsModelFiles extends JModelItem
 
 		$thing = JFile::upload($src, $dest);
 
-		$sql = "INSERT INTO #__crudfiles
+		$sql = "INSERT INTO #__jfmfiles
 				(folder_id, name)
 				VALUES ($folder_id, \"$file_name\")";
 		$db->setQuery($sql);

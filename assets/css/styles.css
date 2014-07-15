@@ -1,0 +1,53 @@
+.bootstrap{
+	margin-left: 10px;
+}
+.btn{
+	font-size: 1em;
+}
+
+.jfm-item{
+	display:block;
+	background-color: #f1f1f1; 
+	width: 760px; 
+	border: 1px solid #b7b7b7;
+	margin:30px 0 20px 0;
+	}
+	.jfm-item>div{
+		display:inline-block;
+		vertical-align: top;
+	}
+	.jfm-item .img{
+		width:200px;
+		height:200px;
+	}
+	.jfm-item .desc{
+		width:550px;
+		padding: 20px 15px;
+		}
+		.jfm-item h3{
+			font-size:11pt;
+			color: #800000;
+			font-weight:bold;
+			margin:0;
+		}
+		.jfm-item p{
+			font-size: 1em;
+			margin: 1em 0 !important;
+		}
+
+
+
+.jfm-header{
+	color:black;
+	font-size: 24pt;
+	margin:40px 0 50px 0;
+	text-transform: uppercase;
+}
+
+h4.panel-title{
+	font-size: 1em;
+	font-weight:bold;
+}
+.table td, .table th {
+   text-align: center;   
+}

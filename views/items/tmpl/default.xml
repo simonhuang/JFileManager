@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="Crud Items Items">
-		<message>Lists all CRUD in a given category.</message>
+	<layout title="Items">
+		<message>Lists all items in a given category.</message>
 	</layout>
 	<fields
 		name="request"
@@ -9,10 +9,10 @@
 	>
 		<fieldset name="request">
 			<field
-				name="id"
-				type="cruditems"
-				label="COM_CRUDITEMS_CRUDITEMS_FIELD_GREETING_LABEL"
-				description="COM_CRUDITEMS_CRUDITEMS_FIELD_GREETING_DESC"
+				name="category_id"
+				type="jfilemanager"
+				label="Items"
+				description="Lists all items in a given category."
 			/>
 		</fieldset>
 	</fields>

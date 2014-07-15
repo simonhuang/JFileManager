@@ -6,17 +6,18 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
  
 /**
- * HTML View class for the CrudItems Component
+ * HTML View class for the JFileManager Component
  */
-class CrudItemsViewItems extends JView
+class JFileManagerViewItems extends JView
 {
 	// Overwriting JView display method
 	function display($tpl = null) 
 	{
 		$document = JFactory::getDocument();
-		$document->addScript(JURI::base() . 'components/com_cruditems/assets/js/jquery-1.11.1.min.js');
-		$document->addStyleSheet(JURI::base() . 'components/com_cruditems/assets/css/bootstrap.css');
-        $document->addScript(JURI::base() . 'components/com_cruditems/assets/js/bootstrap.js');
+		$document->addScript(JURI::base() . 'components/com_jfilemanager/assets/js/jquery-1.11.1.min.js');
+		$document->addStyleSheet(JURI::base() . 'components/com_jfilemanager/assets/css/bootstrap.css');
+        $document->addScript(JURI::base() . 'components/com_jfilemanager/assets/js/bootstrap.js');
+        $document->addStyleSheet(JURI::base() . 'components/com_jfilemanager/assets/css/styles.css');
 
 
 		$user = JFactory::getUser();
@@ -61,8 +62,8 @@ class CrudItemsViewItems extends JView
  		$this->items = $this->get('Items');
 
 
- 		$folder_model = JModel::getInstance('folders', 'CrudItemsModel');
- 		$file_model = JModel::getInstance('files', 'CrudItemsModel');
+ 		$folder_model = JModel::getInstance('folders', 'JFileManagerModel');
+ 		$file_model = JModel::getInstance('files', 'JFileManagerModel');
 
  		foreach ($this->items as $index => $item){
  			$item->folders = $folder_model->getFolders($item->id);

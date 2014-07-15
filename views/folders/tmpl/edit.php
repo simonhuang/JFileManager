@@ -8,12 +8,12 @@ JHtml::_('behavior.tooltip');
 
 ?>
 
-
+<section class="bootstrap">
 <h2><?php echo $this->header ?></h2>
 <form autocomplete="on" class="form-horizontal" role="form" action="<?php echo JRoute::_('index.php'); ?>" method="post" id="folder" name="folder" data-parsley-validate data-parsley-focus="none">
-    <div class="form-group">
+    <div class="form-group row">
         <label for="folder_name" class="col-md-2 control-label">Name *</label>
-        <div class="col-md-10">
+        <div class="col-md-6">
             <input required value="<?php echo $this->name; ?>" class="form-control" name="jform[folder_name]" id="folder_name" placeholder="Folder Name" />
         </div>
     </div>
@@ -23,7 +23,7 @@ JHtml::_('behavior.tooltip');
     <input type="hidden" name="jform[id]" value="<?php echo $this->id; ?>" />
     <input type="hidden" name="jform[item_id]" value="<?php echo $this->item_id; ?>" />
 
-    <input type="hidden" name="option" value="com_cruditems" />
+    <input type="hidden" name="option" value="com_jfilemanager" />
     <input type="hidden" name="task" value="folders.submit" />
 
     
@@ -38,3 +38,4 @@ JHtml::_('behavior.tooltip');
 
     <?php echo JHtml::_('form.token'); ?>
 </form>
+</section>

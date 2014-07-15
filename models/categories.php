@@ -7,9 +7,9 @@ jimport('joomla.application.component.modelitem');
 // Include dependancy of the dispatcher
 jimport('joomla.event.dispatcher');
 /**
- * CrudItems Model
+ * JFileManager Model
  */
-class CrudItemsModelCategories extends JModelItem
+class JFileManagerModelCategories extends JModelItem
 {
 
 
@@ -23,7 +23,7 @@ class CrudItemsModelCategories extends JModelItem
 		$db = JFactory::getDBO();
 
 		$sql = "SELECT id, name
-				FROM #__crudcategories";
+				FROM #__jfmcategories";
 		$db->setQuery($sql);
 		$items = $db->loadObjectList();
 
@@ -37,7 +37,7 @@ class CrudItemsModelCategories extends JModelItem
 		$id = JRequest::getInt('id', 0);
 
 		$sql = "SELECT id, name
-				FROM #__crudcategories
+				FROM #__jfmcategories
 				WHERE id = $id";
 		$db->setQuery($sql);
 		$items = $db->loadObject();
@@ -48,7 +48,7 @@ class CrudItemsModelCategories extends JModelItem
 	{
 		$db = JFactory::getDBO();
 
-		$sql = "DELETE FROM #__crudcategories
+		$sql = "DELETE FROM #__jfmcategories
 				WHERE id=$id";
 		$db->setQuery($sql);
 		$db->query();
@@ -66,7 +66,7 @@ class CrudItemsModelCategories extends JModelItem
 
 		if ($id) {
 			//update old entry
-			$sql = "UPDATE #__crudcategories
+			$sql = "UPDATE #__jfmcategories
 					SET name = \"$name\"
 					WHERE id = $id";
 
@@ -74,7 +74,7 @@ class CrudItemsModelCategories extends JModelItem
 		} else {
 			//new entry
 
-			$sql = "INSERT INTO #__crudcategories
+			$sql = "INSERT INTO #__jfmcategories
 					(name)
 					VALUES (\"$name\")";
 			$db->setQuery($sql);
