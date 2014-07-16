@@ -28,7 +28,7 @@ class JFileManagerControllerFolders extends JControllerForm
 		$data = JRequest::getVar('jform', array(), 'post', 'array');
 
 		// generate file path
-		$path = $model->generatePath($data['folder_name'], $data['folder_id']);
+		$path = $model->generatePath($data['folder_id']);
 
 		// check for folder create name conflicts with existing folders
 		if ($data['id']){

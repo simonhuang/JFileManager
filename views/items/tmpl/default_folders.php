@@ -10,7 +10,7 @@
 
 	$unique_id = 'subfolders'.implode('', $this->traverse);
 ?>
-<div class="panel-group" id="accordion<?php echo $index; ?>">
+<div class="panel-group" id="accordio<?php echo $unique_id; ?>">
 
 	<?php foreach($folders as $i => $f):  ?>
 
@@ -28,7 +28,9 @@
 
 				<?php foreach($f->files as $file): ?>
 					<p>
-						<a class="btn btn-info" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&task=files.downloadFile&id='.$file->id);?>">
+						<a class="btn btn-info" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&task=files.downloadFile
+						&id='.$file->id.'
+						&folder_id='.$f->id);?>">
 						<?php echo $file->name; ?>
 						</a>
 						<a class="btn btn-danger" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&task=files.delete

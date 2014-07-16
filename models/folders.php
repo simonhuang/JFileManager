@@ -44,8 +44,8 @@ class JFileManagerModelFolders extends JModelItem
 	    mkdir($this->files_dir.$dir_path, 0777, true);
 	}
 
-
-	public function generatePath($name, $folder_id){
+	// returns a path to a folder given the folder id
+	public function generatePath($folder_id){
 		
 		// initilize variables
 		$db = JFactory::getDBO();
@@ -87,7 +87,7 @@ class JFileManagerModelFolders extends JModelItem
 
 
 
-	private function getFolderName($id){
+	public function getFolderName($id){
 
 		$db = JFactory::getDBO();
 

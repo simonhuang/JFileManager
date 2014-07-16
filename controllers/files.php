@@ -23,33 +23,38 @@ class JFileManagerControllerFiles extends JControllerForm
 		// initialize key variables
 		$app	= JFactory::getApplication();
 		$model	= $this->getModel('files');
+		$folder_model	= $this->getModel('folders');
 
 		// get post data
 		$data = JRequest::getVar('jform', array(), 'post', 'array');
 		$file = JRequest::getVar('jform', array(), 'files', 'array');
 
+		$path = $folder_model->generatePath($data['folder_id']);
+
 		// add file using post data via a function in the model
-        $upditem = $model->addFile($data, $file);
+        $success = $model->addFile($data, $file, $path);
 
         // check result and display message
-        if ($upditem) {
+        if ($success) {
         	JError::raiseNotice( 100, 'Folder successfuly saved!');
         } else {
             JError::raiseNotice( 100, 'An error has occured. <br> Folder not saved.');
         }   
 
         // get category from the model and redirect
-        $category_id = $model->getCategoryId($data['folder_id']);
+        $category_id = $folder_model->getCategoryId($path, 0);
         $url = JRoute::_('index.php?option=com_jfilemanager&view=items&category_id='.$category_id);
 		$app->redirect($url);
 
 		return true;
 	}
+	
 	public function delete()
 	{
 		// initialize key variables
 		$app	= JFactory::getApplication();
 		$model	= $this->getModel('files');
+		$folder_model	= $this->getModel('folders');
 
 		// grab http get variables
 		$id = JRequest::getInt('id', 0);
@@ -57,17 +62,27 @@ class JFileManagerControllerFiles extends JControllerForm
 		$folder_id = JRequest::getInt('folder_id', 0);
 		$folder_name = JRequest::getString('folder_name', 0);
 
+		$path = $folder_model->generatePath($folder_id);
+
 		// delete file via function in the model
-		$model->deleteFile($id, $file_name, $folder_name);
+		$model->deleteFile($id, $file_name, $path);
 
 		// get category from the model and redirect
-		$category_id = $model->getCategoryId($folder_id);
+		$category_id = $folder_model->getCategoryId($path, 0);
         $url = JRoute::_('index.php?option=com_jfilemanager&view=items&category_id='.$category_id);
 		$app->redirect($url);
 	}
+
 	public function downloadFile(){
 		// initialize model and send file to client via function in the model
 		$model	= $this->getModel('files');
-		$model->downloadFile();
+		$folder_model	= $this->getModel('folders');
+
+		// get path to folder
+		$folder_id = JRequest::getInt('folder_id', 0);
+		$path = $folder_model->generatePath($folder_id);
+
+		// get the file using the path
+		$model->downloadFile($path);
 	}
 }

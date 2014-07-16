@@ -41,19 +41,6 @@ class JFileManagerModelFiles extends JModelItem
 		return $category_id;
 		
 	}
-	private function getFolderName($id){
-
-		$db = JFactory::getDBO();
-
-		$sql = "SELECT name FROM #__jfmfolders
-				WHERE id=$id";
-
-		$db->setQuery($sql);
-
-		$name = $db->loadResult();
-
-		return $name;
-	}
 	private function getFileName($id){
 
 		$db = JFactory::getDBO();
@@ -85,7 +72,7 @@ class JFileManagerModelFiles extends JModelItem
 		return $files;
 	}
 
-	public function downloadFile()
+	public function downloadFile($path)
 	{
 		$db = JFactory::getDBO();
 
@@ -99,16 +86,13 @@ class JFileManagerModelFiles extends JModelItem
 
 		$result = $db->loadObject();
 
-		$folder_name = $this->getFolderName($result->folder_id);
+		$file = $this->files_dir.$path.'/'.$result->name;
 
-		$file = $this->files_dir.$folder_name.'/'.$result->name;
-
-		$see = basename($file);
 
 		if (file_exists($file)) {
 		    header('Content-Description: File Transfer');
 		    header('Content-Type: application/octet-stream');
-		    header('Content-Disposition: attachment; file_name='.basename($file));
+		    header('Content-Disposition: attachment; filename='.basename("$file"));
 		    header('Content-Transfer-Encoding: binary');
 		    header('Expires: 0');
 		    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -121,11 +105,11 @@ class JFileManagerModelFiles extends JModelItem
 		}
 	}
 
-	public function deleteFile($id, $file_name, $folder_name)
+	public function deleteFile($id, $file_name, $path)
 	{
 		$db = JFactory::getDBO();
 
-		unlink($this->files_dir.$folder_name.'/'.$file_name);
+		unlink($this->files_dir.$path.$file_name);
 
 
 		$sql = "DELETE FROM #__jfmfiles
@@ -141,21 +125,6 @@ class JFileManagerModelFiles extends JModelItem
 		// get database object
 		$db = JFactory::getDBO();
 
-		// get files within the folder
-		// $sql = "SELECT id, folder_name, name
-		// 		FROM #__jfmfiles
-		// 		WHERE folder_id = $folder_id";
-
-		// $db->setQuery($sql);
-
-		// $files = $db->loadObjectList();
-
-		// delete all files in folder
-
-		// * ALREADY DONE IN FOLDERS MODEL
-		// foreach ($files as $file){
-		// 	unlink($this->files_dir.$folder_name.'/'.$file->name);
-		// }
 
 		// delete files from database
 		$sql = "DELETE FROM #__jfmfiles
@@ -166,18 +135,17 @@ class JFileManagerModelFiles extends JModelItem
 		$db->query();
 	}
 
-	public function addFile($data, $file)
+	public function addFile($data, $file, $path)
 	{
 		$db = JFactory::getDBO();
 
 		$folder_id = $data['folder_id'];
-		$folder_name = $this->getFolderName($folder_id);
 
 
 		$file_name = JFile::makeSafe($file['name']['file']);
 
 		$src = $file['tmp_name']['file'];
-		$dest = $this->files_dir.$folder_name.'/'.$file_name;
+		$dest = $this->files_dir.$path.'/'.$file_name;
 
 		$thing = JFile::upload($src, $dest);
 
