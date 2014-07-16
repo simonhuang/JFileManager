@@ -23,7 +23,7 @@ class JFileManagerViewFolders extends JView
 		$user = JFactory::getUser();
 		$signin = sizeof($user->groups);
 		if (!$signin){
-		    //do stuff
+		    //do stuff later... maybe
 		}
 
 
@@ -32,6 +32,7 @@ class JFileManagerViewFolders extends JView
 
 	 		$this->id = JRequest::getInt('id', 0) ;
 			$this->item_id = JRequest::getInt('item_id', 0);
+			$this->folder_id = JRequest::getInt('folder_id', 0);
 
 
 	 		// new entry
@@ -46,6 +47,7 @@ class JFileManagerViewFolders extends JView
 				$folder = $this->get('Folder');
 	 			$this->name= $folder->name;
  				$this->item_id= $folder->item_id;
+ 				$this->folder_id= $folder->folder_id;
 
 	 		}
 

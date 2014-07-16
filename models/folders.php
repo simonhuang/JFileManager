@@ -45,6 +45,47 @@ class JFileManagerModelFolders extends JModelItem
 	}
 
 
+	public function generatePath($name, $folder_id){
+		
+		// initilize variables
+		$db = JFactory::getDBO();
+		$path = '';
+		$parent_id = $folder_id;
+
+
+		// loop until we get to the document root to get the path
+		$isRoot = false;
+		do {
+
+			// if there is no parent break loop
+			if (!$folder_id){
+				break;
+			}
+
+			// get parent folder to determine if it is a root
+			$sql = "SELECT name, item_id, folder_id FROM #__jfmfolders
+					WHERE id=$parent_id"; 
+
+			$db->setQuery($sql);
+			$folder = $db->loadObject();
+
+			// update path
+			$path = $folder->name.'/'.$path;
+
+
+			if ($folder->item_id){
+				// if there is an item_id then it is the root
+				$isRoot = true;
+			} else {
+				// or else move onto the next folder
+				$parent_id = $folder->folder_id;
+			}
+		} while (!$isRoot);
+
+		return $path;
+	}
+
+
 
 	private function getFolderName($id){
 
@@ -94,11 +135,9 @@ class JFileManagerModelFolders extends JModelItem
 		return $folder;
 	}
 
-	public function deleteFolder()
+	public function deleteFolder($id)
 	{
 		$db = JFactory::getDBO();
-
-		$id = JRequest::getInt('id', 0) ;
 
 		$sql = "DELETE FROM #__jfmfolders
 				WHERE id=$id";
@@ -114,22 +153,39 @@ class JFileManagerModelFolders extends JModelItem
 	}
 
 
-	public function isDuplicate ($folder_name, $curr_id){
+	public function isDuplicate ($folder_name, $folder_id, $id){
 		$db = JFactory::getDBO();
 
 		$sql = "SELECT id 
 				FROM #__jfmfolders
-				WHERE name = \"$folder_name\" AND id <> $curr_id";
+				WHERE name = \"$folder_name\" AND folder_id == $folder_id AND  id <> $id";
 		$db->setQuery($sql);
 		
 		$category_id = $db->loadObjectList();
 		return (bool)sizeof($category_id);
 	}
 	
-	public function getCategoryId($item_id)
+	public function getCategoryId($path, $item_id)
 	{
+		// initilize variables
 		$db = JFactory::getDBO();
 
+
+		if (!$item_id){
+			// get the name of the root folder from the path
+			$length = strpos($path, '/') ;
+
+			$folder_name = substr($path, 0, $length);
+
+			// get the item_id of the root folder
+			$sql = "SELECT item_id 
+					FROM #__jfmfolders 
+					WHERE name = \"$folder_name\" AND folder_id = 0";
+			$db->setQuery($sql);
+			$item_id = $db->loadResult();
+		}
+
+		// get the category that the item is in
 		$sql = "SELECT category_id 
 				FROM #__jfmitems
 				WHERE id = $item_id";
@@ -139,13 +195,14 @@ class JFileManagerModelFolders extends JModelItem
 		return $category_id;
 		
 	}
-	public function updFolder($data)
+	public function updFolder($data, $path)
 	{
 		$db = JFactory::getDBO();
 
 		$id = $data['id'];
 
 		$item_id = $data['item_id'];
+		$folder_id = $data['folder_id'];
 		$name = $data['folder_name'];
 
 
@@ -154,19 +211,20 @@ class JFileManagerModelFolders extends JModelItem
 
 			$old_name = $this->getFolderName($id);
 
-			$this->renameDir($old_name, $name);
+			$this->renameDir($path.$old_name, $path.$name);
 
 			$sql = "UPDATE #__jfmfolders
-					SET name = \"$name\"
-					WHERE id = $id AND item_id = $item_id";
+					SET name = \"$name\
+					WHERE id = $id";
 
 			$db->setQuery($sql);
 		} else {
 			//new entry
-			$this->createDir($name);
+			$this->createDir($path.$name);
+
 			$sql = "INSERT INTO #__jfmfolders
-					(item_id, name)
-					VALUES ($item_id, \"$name\")";
+					(item_id, folder_id, name)
+					VALUES ($item_id, $folder_id, \"$name\")";
 			$db->setQuery($sql);
 		}
 

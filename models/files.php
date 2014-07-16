@@ -121,26 +121,45 @@ class JFileManagerModelFiles extends JModelItem
 		}
 	}
 
-	public function deleteFile($id)
+	public function deleteFile($id, $file_name, $folder_name)
 	{
 		$db = JFactory::getDBO();
-
-		$sql = "SELECT name, folder_id
-				FROM #__jfmfiles
-				WHERE id = $id";
-
-		$db->setQuery($sql);
-
-		$result = $db->loadObject();
-
-		$file_name = $result->name;
-		$folder_name = $this->getFolderName($result->folder_id);
 
 		unlink($this->files_dir.$folder_name.'/'.$file_name);
 
 
 		$sql = "DELETE FROM #__jfmfiles
 				WHERE id=$id";
+
+		$db->setQuery($sql);
+
+		$db->query();
+	}
+
+	public function deleteFiles($folder_id, $folder_name)
+	{
+		// get database object
+		$db = JFactory::getDBO();
+
+		// get files within the folder
+		// $sql = "SELECT id, folder_name, name
+		// 		FROM #__jfmfiles
+		// 		WHERE folder_id = $folder_id";
+
+		// $db->setQuery($sql);
+
+		// $files = $db->loadObjectList();
+
+		// delete all files in folder
+
+		// * ALREADY DONE IN FOLDERS MODEL
+		// foreach ($files as $file){
+		// 	unlink($this->files_dir.$folder_name.'/'.$file->name);
+		// }
+
+		// delete files from database
+		$sql = "DELETE FROM #__jfmfiles
+				WHERE folder_id = $folder_id";
 
 		$db->setQuery($sql);
 

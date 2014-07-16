@@ -53,10 +53,12 @@ class JFileManagerControllerFiles extends JControllerForm
 
 		// grab http get variables
 		$id = JRequest::getInt('id', 0);
+		$file_name = JRequest::getString('file_name', 0);
 		$folder_id = JRequest::getInt('folder_id', 0);
+		$folder_name = JRequest::getString('folder_name', 0);
 
 		// delete file via function in the model
-		$model->deleteFile($id);
+		$model->deleteFile($id, $file_name, $folder_name);
 
 		// get category from the model and redirect
 		$category_id = $model->getCategoryId($folder_id);

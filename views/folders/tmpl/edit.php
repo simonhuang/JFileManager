@@ -22,6 +22,7 @@ JHtml::_('behavior.tooltip');
 
     <input type="hidden" name="jform[id]" value="<?php echo $this->id; ?>" />
     <input type="hidden" name="jform[item_id]" value="<?php echo $this->item_id; ?>" />
+    <input type="hidden" name="jform[folder_id]" value="<?php echo $this->folder_id; ?>" />
 
     <input type="hidden" name="option" value="com_jfilemanager" />
     <input type="hidden" name="task" value="folders.submit" />
