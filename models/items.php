@@ -73,8 +73,11 @@ class JFileManagerModelItems extends JModelItem
 
 	public function deleteItem($id)
 	{
+		// get key objects
 		$db = JFactory::getDBO();
+		$folder_model = JModel::getInstance('folders', 'JFileManagerModel');
 
+		// delete image
 		$sql = "SELECT img 
 				FROM #__jfmitems
 				WHERE id = $id";
@@ -83,6 +86,9 @@ class JFileManagerModelItems extends JModelItem
 		$old_img = $db->loadResult();
 
 		unlink($this->img_dir.$old_img);
+
+		// delete folders under item
+		$folder_model->deleteFolders($id);
 
 		$sql = "DELETE FROM #__jfmitems
 				WHERE id=$id";

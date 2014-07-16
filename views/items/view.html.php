@@ -25,7 +25,7 @@ class JFileManagerViewItems extends JView
 		$user = JFactory::getUser();
 		$signin = sizeof($user->groups);
 		if (!$signin){
-		    //do stuff
+		    //do stuff if signed in...? maybe later
 		}
 
 
@@ -107,9 +107,10 @@ class JFileManagerViewItems extends JView
 		// get files
 		$folder->files = $file_model->getFiles($folder->id);
 
-		// recursively grab child folders (recursion is oh so beautiful)
+		// recursively grab child folders
 		foreach ($folder->folders as $folder){
-			$this->getFolders($folder, $folder_model, $file_model);
+			// fuck yeah recursion is beautiful
+			self::getFolders($folder, $folder_model, $file_model);
 		}
 	}
 }

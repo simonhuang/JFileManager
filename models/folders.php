@@ -200,7 +200,7 @@ class JFileManagerModelFolders extends JModelItem
 		return $folder;
 	}
 
-	public function deleteFolders($id, $path, $is_root)
+	public function deleteFolder($id, $path, $is_root)
 	{
 		// initialize key objects
 		$db = JFactory::getDBO();
@@ -217,7 +217,7 @@ class JFileManagerModelFolders extends JModelItem
 
 		// recursively delete all child folders
 		foreach ($child_ids as $child_id){
-			self::deleteFolders($child_id, '', false);
+			self::deleteFolder($child_id, '', false);
 		}
 
 		// delete folder and all files in folder
@@ -232,6 +232,25 @@ class JFileManagerModelFolders extends JModelItem
 				WHERE id = $id";
 		$db->setQuery($sql);
 		$db->query();
+	}
+
+	public function deleteFolders($item_id)
+	{
+		// initialize key objects
+		$db = JFactory::getDBO();
+
+		// get all folders of the item
+		$sql = "SELECT id, name
+				FROM #__jfmfolders
+				WHERE item_id = $item_id";
+
+		$db->setQuery($sql);
+		$folders = $db->loadObjectList();
+
+		// delete all folders via the deleteFolder function (see above)
+		foreach ($folders as $folder){
+			$this->deleteFolder($folder->id, $folder->name.'/', true);
+		}
 	}
 
 

@@ -59,7 +59,7 @@ defined('_JEXEC') or die('Restricted access');
 							<?php endforeach; ?>
 
 							<?php 
-
+							// update traverse stack and render template (so it knows where to go to look for the folder to render)
 							array_push($this->traverse, $i);
 
 							echo $this->loadTemplate('folders'); 
