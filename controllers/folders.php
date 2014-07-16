@@ -30,6 +30,7 @@ class JFileManagerControllerFolders extends JControllerForm
 		// generate file path
 		$path = $model->generatePath($data['folder_id']);
 
+		
 		// check for folder create name conflicts with existing folders
 		if ($data['id']){
 			//update folder
@@ -44,8 +45,9 @@ class JFileManagerControllerFolders extends JControllerForm
 			}
 
 		} else {
-			
 			// new folder
+
+
 	        if (file_exists('components/com_jfilemanager/assets/files/'.$path.$data['folder_name'])) {
 
 	        	// if folder already exists, avoid overwriting original folder
@@ -89,7 +91,7 @@ class JFileManagerControllerFolders extends JControllerForm
 
 		// delete folder via function in the model
 		$file_model->deleteFiles($id);
-		$model->deleteFolders($id, $path, true);
+		$model->deleteFolder($id, $path, true);
 
 		// set message
 		JError::raiseNotice( 100, 'Folder successfuly deleted.' );
