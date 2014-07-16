@@ -14,6 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 <?php
 	$items = $this->items;
 	foreach ($items as $index => $item):
+		$this->item_count = $index;
 	?>
 	<article class="jfm-item">
 		<div class="img">
@@ -27,7 +28,7 @@ defined('_JEXEC') or die('Restricted access');
 
 			<div class="panel-group" id="accordion<?php echo $index; ?>">
 
-			<?php foreach($item->folders as $i => $folder):  ?>
+				<?php foreach($item->folders as $i => $folder):  ?>
 
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -40,6 +41,7 @@ defined('_JEXEC') or die('Restricted access');
 
 					<div id="collapse<?php echo $i.'in'.$index;?>" class="panel-collapse collapse">
 						<div class="panel-body">
+
 							<?php foreach($folder->files as $file): ?>
 								<p>
 									<a class="btn btn-info" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&task=files.downloadFile&id='.$file->id);?>">
@@ -55,6 +57,15 @@ defined('_JEXEC') or die('Restricted access');
 								</p>
 
 							<?php endforeach; ?>
+
+							<?php 
+
+							array_push($this->traverse, $i);
+
+							echo $this->loadTemplate('folders'); 
+
+							array_pop($this->traverse);
+							?>
 							<a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&view=files&layout=edit&folder_id='.$folder->id);?>">Add File</a>
 							<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&view=folders&layout=edit&id='.$folder->id);?>">Edit Folder</a>
 							<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&task=folders.delete
@@ -65,7 +76,7 @@ defined('_JEXEC') or die('Restricted access');
 						</div>
 					</div>
 				</div>	
-			<?php endforeach;?>
+				<?php endforeach;?>
 
 			</div>
 

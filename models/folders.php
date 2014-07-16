@@ -103,7 +103,7 @@ class JFileManagerModelFolders extends JModelItem
 
 
 	//core functions
-	public function getFolders($item_id) 
+	public function getRootFolders($item_id) 
 	{
 		$db = JFactory::getDBO();
 
@@ -118,13 +118,28 @@ class JFileManagerModelFolders extends JModelItem
 		return $folders;
 	}
 
+	public function getFolders($folder_id)
+	{
+		$db = JFactory::getDBO();
+
+		$sql = "SELECT id, name
+				FROM #__jfmfolders
+				WHERE folder_id = $folder_id";
+
+		$db->setQuery($sql);
+
+		$folders = $db->loadObjectList();
+
+		return $folders;
+	}
+
 	public function getFolder()
 	{
 		$db = JFactory::getDBO();
 
 		$id = JRequest::getInt('id', 0) ;
 
-		$sql = "SELECT id, item_id, name
+		$sql = "SELECT id, item_id, folder_id, name
 				FROM #__jfmfolders
 				WHERE id = $id";
 
