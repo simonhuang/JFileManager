@@ -74,17 +74,22 @@ class JFileManagerControllerFolders extends JControllerForm
 
 		return true;
 	}
+
+
 	public function delete()
 	{
 		// initilize key variables
 		$id = JRequest::getInt('id', 0);
-		$folder_name = JRequest::getString('folder_name', 0);
 		$model	= $this->getModel('folders');
 		$file_model	= $this->getModel('files');
 
+		// get folder path
+		$path = $model->generatePath($id);
+
+
 		// delete folder via function in the model
-		$file_model->deleteFiles($id, $folder_name);
-		$model->deleteFolder($id);
+		$file_model->deleteFiles($id);
+		$model->deleteFolders($id, $path, true);
 
 		// set message
 		JError::raiseNotice( 100, 'Folder successfuly deleted.' );

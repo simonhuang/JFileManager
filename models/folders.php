@@ -20,7 +20,8 @@ class JFileManagerModelFolders extends JModelItem
 
 	private $files_dir = 'components/com_jfilemanager/assets/files/';
 
-	//helper functions
+	// helper functions
+
 	private function deleteDir($dir_path, $is_root) {
 		if ($is_root) $dir_path = $this->files_dir.$dir_path;
 
@@ -102,7 +103,56 @@ class JFileManagerModelFolders extends JModelItem
 	}
 
 
-	//core functions
+	public function isDuplicate ($folder_name, $folder_id, $id){
+		$db = JFactory::getDBO();
+
+		$sql = "SELECT id 
+				FROM #__jfmfolders
+				WHERE name = \"$folder_name\" AND folder_id == $folder_id AND  id <> $id";
+		$db->setQuery($sql);
+		
+		$category_id = $db->loadObjectList();
+		return (bool)sizeof($category_id);
+	}
+	
+	public function getCategoryId($path, $item_id)
+	{
+		// initilize variables
+		$db = JFactory::getDBO();
+
+
+		if (!$item_id){
+			// get the name of the root folder from the path
+			$length = strpos($path, '/') ;
+
+			$folder_name = substr($path, 0, $length);
+
+			// get the item_id of the root folder
+			$sql = "SELECT item_id 
+					FROM #__jfmfolders 
+					WHERE name = \"$folder_name\" AND folder_id = 0";
+			$db->setQuery($sql);
+			$item_id = $db->loadResult();
+		}
+
+		// get the category that the item is in
+		$sql = "SELECT category_id 
+				FROM #__jfmitems
+				WHERE id = $item_id";
+		$db->setQuery($sql);
+		
+		$category_id = $db->loadResult();
+		return $category_id;
+		
+	}
+
+
+
+
+
+	// crud functions
+
+
 	public function getRootFolders($item_id) 
 	{
 		$db = JFactory::getDBO();
@@ -150,66 +200,41 @@ class JFileManagerModelFolders extends JModelItem
 		return $folder;
 	}
 
-	public function deleteFolder($id)
+	public function deleteFolders($id, $path, $is_root)
 	{
+		// initialize key objects
 		$db = JFactory::getDBO();
-
-		$sql = "DELETE FROM #__jfmfolders
-				WHERE id=$id";
-
-		$db->setQuery($sql);
-
-		$db->query();
+		$file_model = JModel::getInstance('files', 'JFileManagerModel');
 
 
-		$folder_name = $this->getFolderName($id);
-		
-		$this->deleteDir($folder_name, true);
-	}
-
-
-	public function isDuplicate ($folder_name, $folder_id, $id){
-		$db = JFactory::getDBO();
-
+		// get all child folders
 		$sql = "SELECT id 
 				FROM #__jfmfolders
-				WHERE name = \"$folder_name\" AND folder_id == $folder_id AND  id <> $id";
+				WHERE folder_id = $id";
+
 		$db->setQuery($sql);
-		
-		$category_id = $db->loadObjectList();
-		return (bool)sizeof($category_id);
-	}
-	
-	public function getCategoryId($path, $item_id)
-	{
-		// initilize variables
-		$db = JFactory::getDBO();
+		$child_ids = $db->loadColumn();
 
-
-		if (!$item_id){
-			// get the name of the root folder from the path
-			$length = strpos($path, '/') ;
-
-			$folder_name = substr($path, 0, $length);
-
-			// get the item_id of the root folder
-			$sql = "SELECT item_id 
-					FROM #__jfmfolders 
-					WHERE name = \"$folder_name\" AND folder_id = 0";
-			$db->setQuery($sql);
-			$item_id = $db->loadResult();
+		// recursively delete all child folders
+		foreach ($child_ids as $child_id){
+			self::deleteFolders($child_id, '', false);
 		}
 
-		// get the category that the item is in
-		$sql = "SELECT category_id 
-				FROM #__jfmitems
-				WHERE id = $item_id";
+		// delete folder and all files in folder
+		if ($is_root){
+			$this->deleteDir($path, true);
+		}
+
+		// delete folder and files in database
+		$file_model->deleteFiles($id);
+
+		$sql = "DELETE FROM #__jfmfolders
+				WHERE id = $id";
 		$db->setQuery($sql);
-		
-		$category_id = $db->loadResult();
-		return $category_id;
-		
+		$db->query();
 	}
+
+
 	public function updFolder($data, $path)
 	{
 		$db = JFactory::getDBO();

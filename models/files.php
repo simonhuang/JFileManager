@@ -120,7 +120,7 @@ class JFileManagerModelFiles extends JModelItem
 		$db->query();
 	}
 
-	public function deleteFiles($folder_id, $folder_name)
+	public function deleteFiles($folder_id)
 	{
 		// get database object
 		$db = JFactory::getDBO();
