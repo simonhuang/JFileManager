@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
 // Include dependancy of the main controllerform class
 jimport('joomla.application.component.controllerform');
 
-class JFileManagerControllerCategories extends JControllerForm
+class JFileManagerControllerJFileManager extends JControllerForm
 {
 
 	public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true))

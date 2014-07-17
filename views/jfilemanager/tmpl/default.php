@@ -33,8 +33,8 @@ defined('_JEXEC') or die('Restricted access');
 					</a>
 				</td>
 				<td>
-					<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&view=categories&layout=edit&id='.$category->id);?>">Edit</a>
-					<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&task=categories.delete&id='.$category->id);?>">Delete</a>
+					<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&view=jfilemanager&layout=edit&id='.$category->id);?>">Edit</a>
+					<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&task=jfilemanager.delete&id='.$category->id);?>">Delete</a>
 				</td>
 			</tr>
 		<?php endforeach; ?>

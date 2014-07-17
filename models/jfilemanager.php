@@ -9,7 +9,7 @@ jimport('joomla.event.dispatcher');
 /**
  * JFileManager Model
  */
-class JFileManagerModelCategories extends JModelItem
+class JFileManagerModelJFileManager extends JModelItem
 {
 
 

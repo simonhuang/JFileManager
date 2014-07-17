@@ -44,8 +44,8 @@ JHtml::_('behavior.tooltip');
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-          <button type="submit" class="btn btn-success validate">Save</button>
-          <a class="btn btn-success" href="<?php echo JRoute::_('timesheet');?>">Cancel</a>
+            <button type="submit" class="btn btn-success validate">Save</button>
+            <a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_jfilemanager&view=items&category_id='.$this->category_id);?>">Cancel</a>
         </div>
     </div>
     <div class="invalid-form-error-message"></div>

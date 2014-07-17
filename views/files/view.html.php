@@ -32,6 +32,7 @@ class JFileManagerViewFiles extends JView
 
 	 		$this->id = JRequest::getInt('id', 0) ;
 			$this->folder_id = JRequest::getInt('folder_id', 0);
+			$this->category_id = JRequest::getInt('category_id', 0);
 
 
 	 		// new entry

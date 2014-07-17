@@ -128,7 +128,7 @@ class JFileManagerModelFolders extends JModelItem
 
 			$folder_name = substr($path, $start + 1, $length);
 
-			// get the item_id of the root folder
+			// get the item_id of the root folder 
 			$sql = "SELECT item_id 
 					FROM #__jfmfolders 
 					WHERE name = \"$folder_name\" AND folder_id = 0";
@@ -250,7 +250,7 @@ class JFileManagerModelFolders extends JModelItem
 
 		// delete all folders via the deleteFolder function (see above)
 		foreach ($folders as $folder){
-			$this->deleteFolder($folder->id, $item_id.$folder->name.'/', true);
+			$this->deleteFolder($folder->id, $item_id.'_'.$folder->name.'/', true);
 		}
 	}
 
@@ -272,13 +272,13 @@ class JFileManagerModelFolders extends JModelItem
 			$old_name = $this->getFolderName($id);
 
 			if ($path == ''){
-				$this->renameDir($item_id.'_'.$old_name, $item_id.$name);
+				$this->renameDir($item_id.'_'.$old_name, $item_id.'_'.$name);
 			} else {
 				$this->renameDir($path.$old_name, $path.$name);
 			}
 
 			$sql = "UPDATE #__jfmfolders
-					SET name = \"$name\
+					SET name = \"$name\"
 					WHERE id = $id";
 
 			$db->setQuery($sql);

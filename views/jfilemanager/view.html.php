@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HTML View class for the JFileManager Component
  */
-class JFileManagerViewCategories extends JView
+class JFileManagerViewJFileManager extends JView
 {
 	// Overwriting JView display method
 	function display($tpl = null) 
